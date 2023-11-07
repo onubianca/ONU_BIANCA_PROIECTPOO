@@ -19,6 +19,7 @@ public:
 		this->numeAutor = "Rebreanu";
 		this->anPublicatie = 1920;
 		this->nrCapitole = NULL;
+		
 	}
 
 	CartiRomanesti(string titluCarte, string numeAutor, int anPublicatie, int nrCapitole, string* numeCapitole) :idCarte(5)
@@ -32,10 +33,12 @@ public:
 		{
 			this->numeCapitole[i] = numeCapitole[i];
 		}
+
 	}
 
 	CartiRomanesti(string titluCarte, string numeAutor, int anPublicatie) :idCarte(25)
 	{
+		
 		this->titluCarte = titluCarte;
 		this->numeAutor = numeAutor;
 		this->anPublicatie = anPublicatie;
@@ -56,7 +59,7 @@ public:
 		}
 	}
 
-	CartiRomanesti operator=(const CartiRomanesti& a)
+	CartiRomanesti operator=(const CartiRomanesti& a) //op=
 	{
 		if (this != &a)
 		{
@@ -96,8 +99,7 @@ public:
 		CartiRomanesti::limba = limba;
 	}
 
-	void setTitluCarte(string titluCarte)
-        {
+	void setTitluCarte(string titluCarte) {
 		if (titluCarte.length() > 3)
 			this->titluCarte = titluCarte;
 	}
@@ -107,8 +109,7 @@ public:
 		return this->titluCarte;
 	}
 
-	void setNumeAutor(string numeAutor) 
-        {
+	void setNumeAutor(string numeAutor) {
 		if (numeAutor.length() > 3)
 			this->numeAutor = numeAutor;
 	}
@@ -147,7 +148,18 @@ public:
 		return numeCapitole;
 	}
 
-	void afisCartiRomanesti()
+	bool operator==(const CartiRomanesti& a) //op==
+	{
+		return this->titluCarte == a.titluCarte;
+	}
+
+	CartiRomanesti* operator->()  //op->
+	{
+		this->anPublicatie = 2000;
+		return this;
+	}
+
+	/*void afisCartiRomanesti()
 	{
 		cout << "Cartea " << titluCarte << " scrisa de " << numeAutor << " publicata in anul " << anPublicatie << " are " << nrCapitole << " capitole, denumite astfel: ";
 		if (nrCapitole > 0)
@@ -156,10 +168,41 @@ public:
 		else
 			cout << " nu are capitole";
 		cout << endl;
-	}
+	}*/
+	friend ostream& operator<<(ostream& iesireCarti, const CartiRomanesti& a);
+	friend istream& operator>>(istream& intrareCarti, CartiRomanesti& a);
 };
 string CartiRomanesti::limba = "romana";
+ostream& operator<<(ostream& iesireCarti, const CartiRomanesti& a)   
+{
+	iesireCarti << "Cartea " << a.titluCarte << " scrisa de " << a.numeAutor << " publicata in anul " << a.anPublicatie << " are " << a.nrCapitole << " capitole, denumite astfel: ";
+	if (a.nrCapitole > 0)
+		for (int i = 0; i < a.nrCapitole; i++)
+			iesireCarti << a.numeCapitole[i] << " ";
+	else
+		iesireCarti << " nu are capitole";
+	iesireCarti << endl;
+	return iesireCarti;
+}
 
+istream& operator>>(istream& intrareCarti, CartiRomanesti& a) 
+{
+	cout << "Titlul cartii: ";
+	intrareCarti >> a.titluCarte;
+	cout << "Numele autorului: ";
+	intrareCarti >> a.numeAutor;
+	cout << "Anul publicarii: ";
+	intrareCarti >> a.anPublicatie;
+	cout << "Numarul capitolelor: ";
+	intrareCarti >> a.nrCapitole;
+	cout << "Nume capitolelor: ";
+	if (a.numeCapitole != NULL)
+		delete[]a.numeCapitole;
+	a.numeCapitole = new string[a.nrCapitole];
+	for (int i = 0; i < a.nrCapitole; i++)
+		intrareCarti >> a.numeCapitole[i];
+	return intrareCarti;
+}
 class Bibliotecar
 {
 private:
@@ -167,6 +210,7 @@ private:
 	static int nrLegitimatie;
 	string numeBibliotecar;
 	int varsta;
+	char gen;
 	int nrLimbiStraine;
 	string* limbiStraine;
 
@@ -176,13 +220,15 @@ public:
 		this->varsta = 26;
 		this->numeBibliotecar = "Ana";
 		this->nrLimbiStraine = 0;
+		this->gen = 'f';
 		this->limbiStraine = NULL;
 	}
 
-	Bibliotecar(string numeBibliotecar, int varsta, int nrLimbiStraine, string* limbiStraine) :cnp(nrLegitimatie++) 
+	Bibliotecar(string numeBibliotecar, int varsta, char gen, int nrLimbiStraine, string* limbiStraine) :cnp(nrLegitimatie++) 
 	{
 		this->numeBibliotecar = numeBibliotecar;
 		this->varsta = varsta;
+		this->gen = gen;
 		this->nrLimbiStraine = nrLimbiStraine;
 		this->limbiStraine = new string[nrLimbiStraine]; 
 		for (int i = 0; i < nrLimbiStraine; i++)
@@ -196,6 +242,7 @@ public:
 		nrLegitimatie++;
 		this->varsta = varsta;
 		this->numeBibliotecar = numeBibliotecar;
+		this->gen = 'f';
 		this->nrLimbiStraine = 0;
 		this->limbiStraine = NULL;
 	}
@@ -204,6 +251,7 @@ public:
 	{
 		this->numeBibliotecar = b.numeBibliotecar;
 		this->varsta = b.varsta;
+		this->gen = b.gen;
 		this->nrLimbiStraine = b.nrLimbiStraine;
 		this->limbiStraine = new string[b.nrLimbiStraine];
 		for (int i = 0; i < b.nrLimbiStraine; i++)
@@ -212,12 +260,13 @@ public:
 		}
 	}
 
-	Bibliotecar operator=(const Bibliotecar& b)
+	Bibliotecar operator=(const Bibliotecar& b)  //op=
 	{
 		if (this != &b)
 		{
 			this->numeBibliotecar = b.numeBibliotecar;
 			this->varsta = b.varsta;
+			this->gen = b.gen;
 			this->nrLimbiStraine = b.nrLimbiStraine;
 			if (this->limbiStraine != NULL)
 				delete[]this->limbiStraine;
@@ -273,6 +322,16 @@ public:
 		return this->varsta;
 	}
 
+	void setGen(char gen)
+	{
+		this->gen = gen;
+	}
+
+	int getGen()
+	{
+		return this->gen;
+	}
+
 	void setLimbiStraine(int nrLimbiStraine, string* limbiStraine)
 	{
 		if (nrLimbiStraine > 0)
@@ -291,7 +350,21 @@ public:
 		return limbiStraine;
 	}
 
-	void afisBibliotecar()
+	Bibliotecar operator++(int)  //op++
+	{
+		Bibliotecar aux = *this;
+		this->varsta++;
+		return aux;
+	}
+
+	Bibliotecar operator!()  //op!
+	{
+		Bibliotecar aux = *this;
+		aux.gen = !aux.gen;
+		return aux;
+	}
+
+	/*void afisBibliotecar()
 	{
 		cout << "Bibliotecara " << numeBibliotecar << " are " << varsta << " de ani si cunoaste " << nrLimbiStraine << " limbi straine cum ar fi: ";
 		if (nrLimbiStraine > 0)
@@ -300,11 +373,47 @@ public:
 		else
 			cout << " nu cunoste limbi straine.";
 		cout << endl;
-	}
+	}*/
 
-	friend int getVarsta(Bibliotecar b);
+	friend void verifVarstaB(Bibliotecar b);
+	friend ostream& operator<<(ostream& iesireBibliotecar, Bibliotecar& b);
+	friend istream& operator>>(istream& intrareBibliotecar, Bibliotecar& b);
 };
  int Bibliotecar::nrLegitimatie = 100;
+
+ ostream& operator<<(ostream& iesireBibliotecar, Bibliotecar& b)
+ {
+	 iesireBibliotecar << "Bibliotecara " << b.numeBibliotecar << " are " << b.varsta << " de ani si cunoaste " << b.nrLimbiStraine << " limbi straine cum ar fi: ";
+	 if (b.nrLimbiStraine > 0)
+		 for (int i = 0; i < b.nrLimbiStraine; i++)
+			 iesireBibliotecar << b.limbiStraine[i] << " ";
+	 else
+		 iesireBibliotecar << " nu cunoste limbi straine.";
+	 iesireBibliotecar << endl;
+	 return iesireBibliotecar;
+ }
+
+ istream& operator>>(istream& intrareBibliotecar, Bibliotecar& b)
+ {
+	 cout << "Numele: ";
+	 intrareBibliotecar >> b.numeBibliotecar;
+	 cout << "Varsta: ";
+	 intrareBibliotecar >> b.varsta;
+	 cout << "Nr limbilor straine: ";
+	 intrareBibliotecar >> b.nrLimbiStraine;
+	 cout << "limbile Straine: ";
+	 if (b.limbiStraine != NULL)
+		 delete[]b.limbiStraine;
+	 b.limbiStraine = new string[b.nrLimbiStraine];
+	 for (int i = 0; i < b.nrLimbiStraine; i++)
+		 intrareBibliotecar >> b.limbiStraine[i];
+	 return intrareBibliotecar;
+ }
+void verifVarstaB(Bibliotecar b)
+ {
+	if (b.varsta > 20) cout << "da";
+	else cout << "nu" << endl;
+ }
 
 class Biblioteca
 {
@@ -362,7 +471,7 @@ public:
 		}
 	}
 
-	Biblioteca operator=(const Biblioteca& c)
+	Biblioteca operator=(const Biblioteca& c)  //op=
 	{
 		if (this != &c)
 		{
@@ -440,7 +549,18 @@ public:
 		return numeSaliLectura;
 	}
 
-	void afisBiblioteca()
+	string& operator[](int k)  //op[]
+	{
+		if (k >= 0 && k < nrSaliLectura)
+			return numeSaliLectura[k];
+	}
+
+	bool operator>(Biblioteca c)  //op>
+	{
+		return this->suprafata > c.suprafata;
+	}
+
+	/*void afisBiblioteca()
 	{
 		cout << "Biblioteca din orasul " << oras << " are o suprafata de " << suprafata << " metri patrati si  " << nrSaliLectura << " sali lectura numite dupa scriitori romani precum:  ";
 		if (nrSaliLectura > 0)
@@ -450,15 +570,40 @@ public:
 			cout << " nu are sali de lectura.";
 		cout << endl;
 		cout << "Biblioteca se afla pe planeta " << planeta << endl;
-	}
+	}*/
 
 	friend string getSirSaliLectura(const Biblioteca& c);
+	friend ostream& operator<<(ostream& iesireBiblioteca, Biblioteca& c);
+	friend istream& operator>>(istream& intrareBiblioteca, Biblioteca& c);
 };
 string Biblioteca::planeta = "Terra";
 
-int getVarsta(Bibliotecar b)
+ostream& operator<<(ostream& iesireBiblioteca, Biblioteca& c)
 {
-	return b.varsta;
+	iesireBiblioteca << "Biblioteca din orasul " << c.oras << " are o suprafata de " << c.suprafata << " metri patrati si  " << c.nrSaliLectura << " sali lectura numite dupa scriitori romani precum:  ";
+	if (c.nrSaliLectura > 0)
+		for (int i = 0; i < c.nrSaliLectura; i++)
+			iesireBiblioteca << c.numeSaliLectura[i] << " ";
+	else
+		iesireBiblioteca << " nu are sali de lectura.";
+	iesireBiblioteca << endl;
+	return iesireBiblioteca;
+}
+istream& operator>>(istream& intrareBiblioteca, Biblioteca& c)
+{
+	cout << "Oras: ";
+	intrareBiblioteca >> c.oras;
+	cout << "Suprafata: ";
+	intrareBiblioteca >> c.suprafata;
+	cout << "Nr sali lectura: ";
+	intrareBiblioteca >> c.nrSaliLectura;
+	cout << "Nume sali lectura: ";
+	if (c.numeSaliLectura != NULL)
+		delete[]c.numeSaliLectura;
+	c.numeSaliLectura = new string[c.nrSaliLectura];
+	for (int i = 0; i < c.nrSaliLectura; i++)
+		intrareBiblioteca >> c.numeSaliLectura[i];
+	return intrareBiblioteca;
 }
 
 string getSirSaliLectura(const Biblioteca& c)
@@ -473,111 +618,122 @@ string getSirSaliLectura(const Biblioteca& c)
 
 void main()
 {
+	//CartiRomanesti
 	CartiRomanesti a1;
-	a1.afisCartiRomanesti();
+	/*a1.afisCartiRomanesti();*/
+	cout << a1;
 
-	string* numeCapitole = new string[2];
-	numeCapitole[0] = "Glasul Pamantului,";
-	numeCapitole[1] = "Glasul Iubirii";
-
+	string* numeCapitole = new string[2]{ "Glasul Pamantului,", "Glasul Iubirii" };
 	CartiRomanesti a2("Ion", "Rebreanu", 1920, 2, numeCapitole) ;
-	a2.afisCartiRomanesti();
+	/*a2.afisCartiRomanesti();*/
+	cout << a2;
 
 	CartiRomanesti a3("Morometii", "Preda", 1955);
-	a3.afisCartiRomanesti();
+	/*a3.afisCartiRomanesti();*/
+	cout << a3;
 
 	cout << a3.getLimbaPublicatie() << endl;
 
 	CartiRomanesti a4;
 	a4 = a2;
-	a4.afisCartiRomanesti();
-
-	cout << a4.getLimbaPublicatie() << endl;
-
 	a4.setTitluCarte("Morometii");
-	cout << a4.getTitluCarte() << endl;
-
 	a4.setNumeAutor("Preda");
-	cout << a4.getNumeAutor() << endl;
-
 	a4.setAnPublicatie(1955);
-	cout << a4.getAnPublicatie() << endl;
-
-	string* v1 = new string[2]{ "Partea I,", "Partea II" };  
+	cout << "Cartea " << a4.getTitluCarte() << " scrisa de " << a4.getNumeAutor() << " publicata in anul " << a4.getAnPublicatie() << " are doua capitole cu numele:  ";
+	string* v1 = new string[2]{ "Partea I,", "Partea II" };
 	a4.setCapitole(2, v1);
 	for (int j = 0; j < 2; j++)
-		cout << a4.getNumeCapitole()[j] << endl;
+		cout << a4.getNumeCapitole()[j];
 	delete[]v1;
+	cout << endl;
 
-	a4.afisCartiRomanesti();
+	CartiRomanesti a5;
+	a5.setAnPublicatie(2001);
+	cout << a5.getAnPublicatie() << endl;
+	cout << a5->getAnPublicatie() << endl;
+	
+	cin >> a1 >> a2;
+	if (a1 == a2)
+		cout << "Aceiasi carte";
+	else
+		cout << "Carti diferite";
+	cout << endl;
 
+	//Bibliotecar
 	Bibliotecar b1;
-	b1.afisBibliotecar();
+	/*b1.afisBibliotecar();*/
+	cout << b1;
 
 	cout << b1.getNrLegitimatie() << endl;
 
-	string* limbiStraine = new string[3];
-	limbiStraine[0] = "engleza,";
-	limbiStraine[1] = "germana,";
-	limbiStraine[2] = "franceza";
-
-	Bibliotecar b2("Maria", 37, 3, limbiStraine);
-	b2.afisBibliotecar();
+	string* limbiStraine = new string[3]{ "engleza","franceza","germana" };
+	Bibliotecar b2("Maria", 17, 'f', 3, limbiStraine);
+	//b2.afisBibliotecar();
+	cout << b2;
 
 	Bibliotecar b3("Anca", 29);
-	b3.afisBibliotecar();
+	//b3.afisBibliotecar();
+	b3++;
+	cout << b3;
 
 	Bibliotecar b4 = b3;
-	b4.afisBibliotecar();
-
 	b4.setNumeBibliotecar("Sara");
-	cout << b4.getNumeBibliotecar() << endl;
-
 	b4.setVarsta(47);
-	cout << b4.getVarsta() << endl;
-
+	b4.setGen('f');
+	cout << "Bibliotecara " << b4.getNumeBibliotecar() << " are " << b4.getVarsta() << " de ani si cunoaste patru limbi straine cum ar fi: ";
 	string* v2 = new string[4]{ "engleza,", "franceza,", "germana,", "araba"};
 	b4.setLimbiStraine(4, v2);
 	for (int j = 0; j < 4; j++)
-		cout << b4.getLimbiStraine()[j] << endl;
+		cout << b4.getLimbiStraine()[j];
 	delete[]v2;
-
-	b4.afisBibliotecar();
-
-	cout << getVarsta(b1)<< endl;
-
-	Biblioteca c1;
-	c1.afisBiblioteca();
-
-	string* numeSaliLectura = new string[2];
-	numeSaliLectura[0] = "Eminescu,";
-	numeSaliLectura[1] = "Creanga";
+	cout << endl;
 	
+	Bibliotecar b5;
+	cin >> b5;
+	cout << b5;
+	verifVarstaB(b5);
+
+	cout << endl;
+	if (!b4.getGen())
+		cout << "da";
+	else
+		cout << "nu";
+	cout << endl;
+
+	//Biblioteca
+	Biblioteca c1;
+	/*c1.afisBiblioteca();*/
+	cin >> c1;
+	cout << c1;
+
+	string* numeSaliLectura = new string[2]{ "Eminescu,", "Creanga" };
 	Biblioteca c2("Iasi", 1500, 2, numeSaliLectura);
-	c2.afisBiblioteca();
+	/*c2.afisBiblioteca();*/
+	cout << c2;
 
 	Biblioteca c3(2, numeSaliLectura);
-	c3.afisBiblioteca();
+	/*c3.afisBiblioteca();*/
+	cout << c3;
 
 	Biblioteca c4 = c1;
-	c4.afisBiblioteca();
-
 	c4.setOras("Timisoara");
-	cout << c4.getOras() << endl;
-
 	c4.setSuprafata(4500);
-	cout << c4.getSuprafata() << endl;
-
+	cout << "Biblioteca din orasul " << c4.getOras() << " are o suprafata de " << c4.getSuprafata() << " metri patrati si trei sali de lectura numite dupa scriitori romani precum:  ";
 	string* v3 = new string[3]{ "Eminescu,", "Creanga,", "Caragiale"};
 	c4.setSaliLetura(3, v3);
 	for (int j = 0; j < 3; j++)
-		cout << c4.getSaliLetura()[j] << endl;
+		cout << c4.getSaliLetura()[j];
 	delete[]v3;
+	cout << endl;
+	cout << c4[2] << endl;
 
-	c4.afisBiblioteca();
+	if (c2 > c4)
+		cout << "c2 e mai mare";
+	else
+		cout << "c4 e mai mare";
+	cout << endl;
 
 	cout << getSirSaliLectura(c4) << endl;
 
 	Biblioteca::setPlaneta("planeta Terra");
-	
 }
