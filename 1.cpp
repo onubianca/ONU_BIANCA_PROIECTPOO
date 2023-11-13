@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-class CartiRomanesti 
+class CartiRomanesti
 {
 private:
 	const int idCarte;
@@ -11,7 +11,7 @@ private:
 	int anPublicatie;
 	int nrCapitole;
 	string* numeCapitole;
-	
+
 public:
 	CartiRomanesti() :idCarte(1)
 	{
@@ -19,7 +19,7 @@ public:
 		this->numeAutor = "Rebreanu";
 		this->anPublicatie = 1920;
 		this->nrCapitole = NULL;
-		
+
 	}
 
 	CartiRomanesti(string titluCarte, string numeAutor, int anPublicatie, int nrCapitole, string* numeCapitole) :idCarte(5)
@@ -38,7 +38,7 @@ public:
 
 	CartiRomanesti(string titluCarte, string numeAutor, int anPublicatie) :idCarte(25)
 	{
-		
+
 		this->titluCarte = titluCarte;
 		this->numeAutor = numeAutor;
 		this->anPublicatie = anPublicatie;
@@ -142,8 +142,8 @@ public:
 				this->numeCapitole[i] = numeCapitole[i];
 		}
 	}
-	
-	string* getNumeCapitole()   
+
+	string* getNumeCapitole()
 	{
 		return numeCapitole;
 	}
@@ -157,6 +157,12 @@ public:
 	{
 		this->anPublicatie = 2000;
 		return this;
+	}
+
+	string& operator[](int k)  //op[]
+	{
+		if (k >= 0 && k < nrCapitole)
+			return numeCapitole[k];
 	}
 
 	/*void afisCartiRomanesti()
@@ -173,7 +179,7 @@ public:
 	friend istream& operator>>(istream& intrareCarti, CartiRomanesti& a);
 };
 string CartiRomanesti::limba = "romana";
-ostream& operator<<(ostream& iesireCarti, const CartiRomanesti& a)   
+ostream& operator<<(ostream& iesireCarti, const CartiRomanesti& a)
 {
 	iesireCarti << "Cartea " << a.titluCarte << " scrisa de " << a.numeAutor << " publicata in anul " << a.anPublicatie << " are " << a.nrCapitole << " capitole, denumite astfel: ";
 	if (a.nrCapitole > 0)
@@ -185,7 +191,7 @@ ostream& operator<<(ostream& iesireCarti, const CartiRomanesti& a)
 	return iesireCarti;
 }
 
-istream& operator>>(istream& intrareCarti, CartiRomanesti& a) 
+istream& operator>>(istream& intrareCarti, CartiRomanesti& a)
 {
 	cout << "Titlul cartii: ";
 	intrareCarti >> a.titluCarte;
@@ -196,8 +202,8 @@ istream& operator>>(istream& intrareCarti, CartiRomanesti& a)
 	cout << "Numarul capitolelor: ";
 	intrareCarti >> a.nrCapitole;
 	cout << "Nume capitolelor: ";
-	if (a.numeCapitole != NULL)
-		delete[]a.numeCapitole;
+	/*if (a.numeCapitole != NULL)
+		delete[]a.numeCapitole;*/
 	a.numeCapitole = new string[a.nrCapitole];
 	for (int i = 0; i < a.nrCapitole; i++)
 		intrareCarti >> a.numeCapitole[i];
@@ -224,13 +230,13 @@ public:
 		this->limbiStraine = NULL;
 	}
 
-	Bibliotecar(string numeBibliotecar, int varsta, char gen, int nrLimbiStraine, string* limbiStraine) :cnp(nrLegitimatie++) 
+	Bibliotecar(string numeBibliotecar, int varsta, char gen, int nrLimbiStraine, string* limbiStraine) :cnp(nrLegitimatie++)
 	{
 		this->numeBibliotecar = numeBibliotecar;
 		this->varsta = varsta;
 		this->gen = gen;
 		this->nrLimbiStraine = nrLimbiStraine;
-		this->limbiStraine = new string[nrLimbiStraine]; 
+		this->limbiStraine = new string[nrLimbiStraine];
 		for (int i = 0; i < nrLimbiStraine; i++)
 		{
 			this->limbiStraine[i] = limbiStraine[i];
@@ -292,7 +298,7 @@ public:
 
 	static void setNrLegitimatie(int nrLegitimaie)
 	{
-		Bibliotecar::nrLegitimatie=nrLegitimaie+1;
+		Bibliotecar::nrLegitimatie = nrLegitimaie + 1;
 	}
 
 	static int getNrLegitimatie()
@@ -379,41 +385,41 @@ public:
 	friend ostream& operator<<(ostream& iesireBibliotecar, Bibliotecar& b);
 	friend istream& operator>>(istream& intrareBibliotecar, Bibliotecar& b);
 };
- int Bibliotecar::nrLegitimatie = 100;
+int Bibliotecar::nrLegitimatie = 100;
 
- ostream& operator<<(ostream& iesireBibliotecar, Bibliotecar& b)
- {
-	 iesireBibliotecar << "Bibliotecara " << b.numeBibliotecar << " are " << b.varsta << " de ani si cunoaste " << b.nrLimbiStraine << " limbi straine cum ar fi: ";
-	 if (b.nrLimbiStraine > 0)
-		 for (int i = 0; i < b.nrLimbiStraine; i++)
-			 iesireBibliotecar << b.limbiStraine[i] << " ";
-	 else
-		 iesireBibliotecar << " nu cunoste limbi straine.";
-	 iesireBibliotecar << endl;
-	 return iesireBibliotecar;
- }
+ostream& operator<<(ostream& iesireBibliotecar, Bibliotecar& b)
+{
+	iesireBibliotecar << "Bibliotecara " << b.numeBibliotecar << " are " << b.varsta << " de ani si cunoaste " << b.nrLimbiStraine << " limbi straine cum ar fi: ";
+	if (b.nrLimbiStraine > 0)
+		for (int i = 0; i < b.nrLimbiStraine; i++)
+			iesireBibliotecar << b.limbiStraine[i] << " ";
+	else
+		iesireBibliotecar << " nu cunoste limbi straine.";
+	iesireBibliotecar << endl;
+	return iesireBibliotecar;
+}
 
- istream& operator>>(istream& intrareBibliotecar, Bibliotecar& b)
- {
-	 cout << "Numele: ";
-	 intrareBibliotecar >> b.numeBibliotecar;
-	 cout << "Varsta: ";
-	 intrareBibliotecar >> b.varsta;
-	 cout << "Nr limbilor straine: ";
-	 intrareBibliotecar >> b.nrLimbiStraine;
-	 cout << "limbile Straine: ";
-	 if (b.limbiStraine != NULL)
-		 delete[]b.limbiStraine;
-	 b.limbiStraine = new string[b.nrLimbiStraine];
-	 for (int i = 0; i < b.nrLimbiStraine; i++)
-		 intrareBibliotecar >> b.limbiStraine[i];
-	 return intrareBibliotecar;
- }
+istream& operator>>(istream& intrareBibliotecar, Bibliotecar& b)
+{
+	cout << "Numele: ";
+	intrareBibliotecar >> b.numeBibliotecar;
+	cout << "Varsta: ";
+	intrareBibliotecar >> b.varsta;
+	cout << "Nr limbilor straine: ";
+	intrareBibliotecar >> b.nrLimbiStraine;
+	cout << "limbile Straine: ";
+	/*if (b.limbiStraine != NULL)
+		delete[]b.limbiStraine;*/
+	b.limbiStraine = new string[b.nrLimbiStraine];
+	for (int i = 0; i < b.nrLimbiStraine; i++)
+		intrareBibliotecar >> b.limbiStraine[i];
+	return intrareBibliotecar;
+}
 void verifVarstaB(Bibliotecar b)
- {
+{
 	if (b.varsta > 20) cout << "da";
 	else cout << "nu" << endl;
- }
+}
 
 class Biblioteca
 {
@@ -598,8 +604,8 @@ istream& operator>>(istream& intrareBiblioteca, Biblioteca& c)
 	cout << "Nr sali lectura: ";
 	intrareBiblioteca >> c.nrSaliLectura;
 	cout << "Nume sali lectura: ";
-	if (c.numeSaliLectura != NULL)
-		delete[]c.numeSaliLectura;
+	/*if (c.numeSaliLectura != NULL)
+		delete[]c.numeSaliLectura;*/
 	c.numeSaliLectura = new string[c.nrSaliLectura];
 	for (int i = 0; i < c.nrSaliLectura; i++)
 		intrareBiblioteca >> c.numeSaliLectura[i];
@@ -624,7 +630,7 @@ void main()
 	cout << a1;
 
 	string* numeCapitole = new string[2]{ "Glasul Pamantului,", "Glasul Iubirii" };
-	CartiRomanesti a2("Ion", "Rebreanu", 1920, 2, numeCapitole) ;
+	CartiRomanesti a2("Ion", "Rebreanu", 1920, 2, numeCapitole);
 	/*a2.afisCartiRomanesti();*/
 	cout << a2;
 
@@ -651,13 +657,70 @@ void main()
 	a5.setAnPublicatie(2001);
 	cout << a5.getAnPublicatie() << endl;
 	cout << a5->getAnPublicatie() << endl;
-	
+
 	cin >> a1 >> a2;
 	if (a1 == a2)
 		cout << "Aceiasi carte";
 	else
 		cout << "Carti diferite";
 	cout << endl;
+
+	//vector1
+	int nrCarti;
+	cout << "Introduceti numarul de carti: ";
+	cin >> nrCarti;
+	CartiRomanesti* carti = new CartiRomanesti[nrCarti];
+	for (int i = 0; i < nrCarti; i++) {
+		cout << i + 1 << endl;
+		cin >> carti[i];
+	}
+	for (int i = 0; i < nrCarti; i++) {
+		cout << carti[i];
+	}
+	delete[] carti;
+
+	/*int numarLinii, numarColoane;
+	cout << "Introduceti numarul de linii: ";
+	cin >> numarLinii;
+	cout << "Introduceti numarul de coloane: ";
+	cin >> numarColoane;
+
+	CartiRomanesti** carti = new CartiRomanesti * [numarLinii];
+	for (int i = 0; i < numarLinii; i++) {
+		carti[i] = new CartiRomanesti[numarColoane];
+	}
+	for (int i = 0; i < numarLinii; i++) {
+		for (int j = 0; j < numarColoane; j++) {
+			cin >> carti[i][j];
+		}
+	}
+	for (int i = 0; i < numarLinii; i++) {
+		for (int j = 0; j < numarColoane; j++) {
+			cout << carti[i][j];
+		}
+	}
+	for (int i = 0; i < numarLinii; i++) {
+		delete[] carti[i];
+	}
+	delete[] carti;*/
+
+	//matrice
+	const int nrLinii = 2;
+	const int nrColoane = 2;
+	CartiRomanesti carte[nrLinii][nrColoane];
+	for (int i = 0; i < nrLinii; i++) {
+		for (int j = 0; j < nrColoane; j++) {
+			cout << i + 1 << " " << j + 1 << endl;
+			cin >> carte[i][j];
+		}
+	}
+	for (int i = 0; i < nrLinii; i++) {
+		for (int j = 0; j < nrColoane; j++) {
+			cout << carte[i][j] << " ";
+		}
+		cout << endl;
+	}
+
 
 	//Bibliotecar
 	Bibliotecar b1;
@@ -681,13 +744,13 @@ void main()
 	b4.setVarsta(47);
 	b4.setGen('f');
 	cout << "Bibliotecara " << b4.getNumeBibliotecar() << " are " << b4.getVarsta() << " de ani si cunoaste patru limbi straine cum ar fi: ";
-	string* v2 = new string[4]{ "engleza,", "franceza,", "germana,", "araba"};
+	string* v2 = new string[4]{ "engleza,", "franceza,", "germana,", "araba" };
 	b4.setLimbiStraine(4, v2);
 	for (int j = 0; j < 4; j++)
 		cout << b4.getLimbiStraine()[j];
 	delete[]v2;
 	cout << endl;
-	
+
 	Bibliotecar b5;
 	cin >> b5;
 	cout << b5;
@@ -699,6 +762,19 @@ void main()
 	else
 		cout << "nu";
 	cout << endl;
+
+	//vector2
+	int numarBibliotecari;
+	cout << "Introduceti numarul de bibliotecari: ";
+	cin >> numarBibliotecari;
+	Bibliotecar* bibliotecar = new Bibliotecar[numarBibliotecari];
+	for (int i = 0; i < numarBibliotecari; i++) {
+		cin >> bibliotecar[i];
+	}
+	for (int i = 0; i < numarBibliotecari; i++) {
+		cout << bibliotecar[i];
+	}
+	delete[] bibliotecar;
 
 	//Biblioteca
 	Biblioteca c1;
@@ -719,7 +795,7 @@ void main()
 	c4.setOras("Timisoara");
 	c4.setSuprafata(4500);
 	cout << "Biblioteca din orasul " << c4.getOras() << " are o suprafata de " << c4.getSuprafata() << " metri patrati si trei sali de lectura numite dupa scriitori romani precum:  ";
-	string* v3 = new string[3]{ "Eminescu,", "Creanga,", "Caragiale"};
+	string* v3 = new string[3]{ "Eminescu,", "Creanga,", "Caragiale" };
 	c4.setSaliLetura(3, v3);
 	for (int j = 0; j < 3; j++)
 		cout << c4.getSaliLetura()[j];
@@ -734,6 +810,19 @@ void main()
 	cout << endl;
 
 	cout << getSirSaliLectura(c4) << endl;
+
+	//vector3
+	int numarBiblioteci;
+	cout << "Introduceti numarul de biblioteci: ";
+	cin >> numarBiblioteci;
+	Biblioteca* biblioteca = new Biblioteca[numarBiblioteci];
+	for (int i = 0; i < numarBiblioteci; i++) {
+		cin >> biblioteca[i];
+	}
+	for (int i = 0; i < numarBiblioteci; i++) {
+		cout << biblioteca[i];
+	}
+	delete[] biblioteca;
 
 	Biblioteca::setPlaneta("planeta Terra");
 }
