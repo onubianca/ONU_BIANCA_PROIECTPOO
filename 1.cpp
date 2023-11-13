@@ -678,48 +678,23 @@ void main()
 		cout << carti[i];
 	}
 	delete[] carti;
-
-	/*int numarLinii, numarColoane;
-	cout << "Introduceti numarul de linii: ";
-	cin >> numarLinii;
-	cout << "Introduceti numarul de coloane: ";
-	cin >> numarColoane;
-
-	CartiRomanesti** carti = new CartiRomanesti * [numarLinii];
-	for (int i = 0; i < numarLinii; i++) {
-		carti[i] = new CartiRomanesti[numarColoane];
-	}
-	for (int i = 0; i < numarLinii; i++) {
-		for (int j = 0; j < numarColoane; j++) {
-			cin >> carti[i][j];
-		}
-	}
-	for (int i = 0; i < numarLinii; i++) {
-		for (int j = 0; j < numarColoane; j++) {
-			cout << carti[i][j];
-		}
-	}
-	for (int i = 0; i < numarLinii; i++) {
-		delete[] carti[i];
-	}
-	delete[] carti;*/
-
+	
 	//matrice
-	const int nrLinii = 2;
-	const int nrColoane = 2;
-	CartiRomanesti carte[nrLinii][nrColoane];
-	for (int i = 0; i < nrLinii; i++) {
-		for (int j = 0; j < nrColoane; j++) {
-			cout << i + 1 << " " << j + 1 << endl;
-			cin >> carte[i][j];
-		}
+	CartiRomanesti** carte = new CartiRomanesti * [nrLinii];
+for (int i = 0; i < nrLinii; i++) {
+	carte[i] = new CartiRomanesti[nrColoane];
+}
+for (int i = 0; i < nrLinii; i++) {
+	for (int j = 0; j < nrColoane; j++) {
+		cout << i + 1 << " " << j + 1 << endl;
+		cin >> carte[i][j];
 	}
-	for (int i = 0; i < nrLinii; i++) {
-		for (int j = 0; j < nrColoane; j++) {
-			cout << carte[i][j] << " ";
-		}
-		cout << endl;
+}
+for (int i = 0; i < nrLinii; i++) {
+	for (int j = 0; j < nrColoane; j++) {
+		cout << carte[i][j];
 	}
+}
 
 
 	//Bibliotecar
