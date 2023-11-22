@@ -177,6 +177,7 @@ public:
 	}*/
 	friend ostream& operator<<(ostream& iesireCarti, const CartiRomanesti& a);
 	friend istream& operator>>(istream& intrareCarti, CartiRomanesti& a);
+	friend class Cititor;
 };
 string CartiRomanesti::limba = "romana";
 ostream& operator<<(ostream& iesireCarti, const CartiRomanesti& a)
@@ -622,8 +623,99 @@ string getSirSaliLectura(const Biblioteca& c)
 	return aux;
 }
 
+class Cititor
+{
+private:
+	const int idCititor;
+	int nrCartiImprumutate;
+	CartiRomanesti* carte;
+
+public:
+	Cititor() :idCititor(0)
+	{
+		this->nrCartiImprumutate = 1;
+		
+	}
+	Cititor(int idCititor, int nrCartiImprumutate, CartiRomanesti* carte) :idCititor(idCititor)
+	{
+		this->nrCartiImprumutate = nrCartiImprumutate;
+		this->carte = new CartiRomanesti[this->nrCartiImprumutate];
+		for (int i = 0; i < this->nrCartiImprumutate; i++)
+		{
+			this->carte[i] = carte[i];
+		}
+	}
+	Cititor(const Cititor& d) : idCititor(d.idCititor)
+	{
+		this->nrCartiImprumutate = d.nrCartiImprumutate;
+		this->carte = new CartiRomanesti[nrCartiImprumutate];
+		for (int i = 0; i < this->nrCartiImprumutate; i++)
+		{
+			this->carte[i] = d.carte[i];
+		}
+	}
+	Cititor operator=(const Cititor& d) 
+	{
+		if (this != &d)
+		{
+			this->nrCartiImprumutate = d.nrCartiImprumutate;
+			if (this->carte != NULL)
+				delete[] carte;
+			this->carte = new CartiRomanesti[nrCartiImprumutate];
+			for (int i = 0; i < this->nrCartiImprumutate; i++)
+			{
+				this->carte[i] = d.carte[i];
+			}
+		}
+		return *this;
+	}
+
+	~Cititor()
+	{
+		if (this->carte != NULL)
+			delete[]this->carte;
+	}
+	int getIdCititor()
+	{
+		return this->idCititor;
+	}
+	void setCarte(int nrCartiImprumutate, CartiRomanesti* carte)
+	{
+		if (nrCartiImprumutate > 0)
+		{
+			this->nrCartiImprumutate = nrCartiImprumutate;
+			if (this->carte != NULL)
+				delete[]this->carte;
+			this->carte = new CartiRomanesti[nrCartiImprumutate];
+			for (int i = 0; i < nrCartiImprumutate; i++)
+				this->carte[i] = carte[i];
+		}
+	}
+
+	CartiRomanesti* getCarte()
+	{
+		return carte;
+	}
+	bool operator!=(const Cititor& d)
+	{
+		return this->nrCartiImprumutate != d.nrCartiImprumutate;
+	}
+	friend ostream& operator<<(ostream& iesireCititor, const Cititor& d);
+};
+ostream& operator<<(ostream& iesireCititor, const Cititor& d)
+{
+	iesireCititor << "Cititorul a imprumutat  " << d.nrCartiImprumutate << " carti cum ar fi: " ;
+	if (d.nrCartiImprumutate > 0)
+		for (int i = 0; i < d.nrCartiImprumutate; i++)
+			iesireCititor << d.carte[i] << " ";
+	else
+		iesireCititor << " nu a imprumutat carti";
+	iesireCititor << endl;
+	return iesireCititor;
+}
 void main()
 {
+
 	//CartiRomanesti
 	CartiRomanesti a1;
 	/*a1.afisCartiRomanesti();*/
@@ -665,7 +757,6 @@ void main()
 		cout << "Carti diferite";
 	cout << endl;
 
-	//vector1
 	int nrCarti;
 	cout << "Introduceti numarul de carti: ";
 	cin >> nrCarti;
@@ -678,24 +769,28 @@ void main()
 		cout << carti[i];
 	}
 	delete[] carti;
-	
-	//matrice
-	CartiRomanesti** carte = new CartiRomanesti * [nrLinii];
-for (int i = 0; i < nrLinii; i++) {
-	carte[i] = new CartiRomanesti[nrColoane];
-}
-for (int i = 0; i < nrLinii; i++) {
-	for (int j = 0; j < nrColoane; j++) {
-		cout << i + 1 << " " << j + 1 << endl;
-		cin >> carte[i][j];
-	}
-}
-for (int i = 0; i < nrLinii; i++) {
-	for (int j = 0; j < nrColoane; j++) {
-		cout << carte[i][j];
-	}
-}
 
+	int nrLinii, nrColoane;
+	cout << "Introduceti numarul de linii: ";
+	cin >> nrLinii;
+	cout << "Introduceti numarul de coloane: ";
+	cin >> nrColoane;
+
+	CartiRomanesti** carte = new CartiRomanesti * [nrLinii];
+	for (int i = 0; i < nrLinii; i++) {
+		carte[i] = new CartiRomanesti[nrColoane];
+	}
+	for (int i = 0; i < nrLinii; i++) {
+		for (int j = 0; j < nrColoane; j++) {
+			cout << i + 1 << " " << j + 1 << endl;
+			cin >> carte[i][j];
+		}
+	}
+	for (int i = 0; i < nrLinii; i++) {
+		for (int j = 0; j < nrColoane; j++) {
+			cout << carte[i][j];
+		}
+	}
 
 	//Bibliotecar
 	Bibliotecar b1;
@@ -738,7 +833,6 @@ for (int i = 0; i < nrLinii; i++) {
 		cout << "nu";
 	cout << endl;
 
-	//vector2
 	int numarBibliotecari;
 	cout << "Introduceti numarul de bibliotecari: ";
 	cin >> numarBibliotecari;
@@ -786,7 +880,6 @@ for (int i = 0; i < nrLinii; i++) {
 
 	cout << getSirSaliLectura(c4) << endl;
 
-	//vector3
 	int numarBiblioteci;
 	cout << "Introduceti numarul de biblioteci: ";
 	cin >> numarBiblioteci;
@@ -800,4 +893,13 @@ for (int i = 0; i < nrLinii; i++) {
 	delete[] biblioteca;
 
 	Biblioteca::setPlaneta("planeta Terra");
+
+    CartiRomanesti carte1, carte2;
+    CartiRomanesti* vector = new CartiRomanesti[2]{ carte1, carte2 };
+	Cititor d1;
+	cout << d1 << endl;
+	Cititor d2 = d1;
+	cout << d2 << endl;
+	Cititor d3(1, 2, vector);
+	cout << d3;
 }
