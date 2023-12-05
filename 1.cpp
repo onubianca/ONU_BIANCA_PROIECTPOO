@@ -794,6 +794,7 @@ public:
 	}
 
 	friend ostream& operator<<(ostream& iesireCititor, const Cititor& d);
+	friend istream& operator>>(istream& intrareCititor, Cititor& d);
 
 	friend ofstream& operator<<(ofstream& iesireCi, const Cititor& d);
 	friend ifstream& operator>>(ifstream& intrareCi, Cititor& d);
@@ -808,6 +809,20 @@ ostream& operator<<(ostream& iesireCititor, const Cititor& d)
 		iesireCititor << " nu a imprumutat carti";
 	iesireCititor << endl;
 	return iesireCititor;
+}
+istream& operator>>(istream& intrareCititor, Cititor& d)
+{
+	cout << " nr carti imprumutate: ";
+	intrareCititor >> d.nrCartiImprumutate;
+	if (d.carte != NULL)
+		delete[]d.carte;
+	d.carte = new CartiRomanesti[d.nrCartiImprumutate];
+	for (int i = 0; i < d.nrCartiImprumutate; i++)
+	{
+		cout << " titlurile cartilor imprumutate: ";
+		intrareCititor >> d.carte[i];
+	}
+	return intrareCititor;
 }
 
 ofstream& operator<<(ofstream& iesireCi, const Cititor& d)  //afisare in fis
@@ -831,9 +846,175 @@ ifstream& operator>>(ifstream& intrareCi, Cititor& d)
 	return intrareCi;
 }
 
-//faza 7
-//clasa autor mosteneste clasa carti
-//clasa permis_biblioteca mosteneste clasa cititor
+class Autor : public CartiRomanesti
+{
+private:
+	char* numeAutor;
+	int nrCartiPublicate;
+
+public:
+	Autor() : CartiRomanesti()
+	{
+		this->nrCartiPublicate = 5;
+		this->numeAutor = new char[strlen("Sadoveanu") + 1];
+		strcpy_s(this->numeAutor, strlen("Sadoveanu") + 1, "Sadoveanu");
+	}
+	Autor(int nrCartiPublicate, const char* numeAutor) : CartiRomanesti()
+	{
+		this->nrCartiPublicate = nrCartiPublicate;
+		this->numeAutor = new char[strlen(numeAutor) + 1];
+		strcpy_s(this->numeAutor, strlen(numeAutor) + 1, numeAutor);
+	}
+	Autor(const Autor& a) : CartiRomanesti(a)
+	{
+		this->nrCartiPublicate = a.nrCartiPublicate;
+		this->numeAutor = new char[strlen(a.numeAutor) + 1];
+		strcpy_s(this->numeAutor, strlen(a.numeAutor) + 1, a.numeAutor);
+	}
+	Autor operator=(const Autor& a)
+	{
+		if(this!=&a)
+		{
+			(CartiRomanesti)*this = (CartiRomanesti)a;
+			this->nrCartiPublicate = a.nrCartiPublicate;
+			if (this->numeAutor) delete[]this->numeAutor;
+			this->numeAutor = new char[strlen(a.numeAutor) + 1];
+			strcpy_s(this->numeAutor, strlen(a.numeAutor) + 1, a.numeAutor);
+		}
+		return *this;
+	}
+	~Autor()
+	{
+		if (this->numeAutor) delete[]this->numeAutor;
+	}
+
+	char* getNumeAutor()
+	{
+		return this->numeAutor;
+	}
+	void setNumeAutor(char* numeAutor)
+	{
+		if (this->numeAutor) delete[]this->numeAutor;
+		this->numeAutor = new char[strlen(numeAutor) + 1];
+		strcpy_s(this->numeAutor, strlen(numeAutor) + 1, numeAutor);
+	}
+	int getNrCartiPublicate()
+	{
+		return this->nrCartiPublicate;
+	}
+	void setNrCartiPublicate(int nr)
+	{
+		this->nrCartiPublicate = nr;
+	}
+
+	friend ostream& operator<<(ostream& out, const Autor& a);
+	friend istream& operator>>(istream& intrareAutor, Autor& a);
+};
+ostream& operator<<(ostream& iesireAutor, const Autor& a)
+{
+	iesireAutor << (CartiRomanesti)a;
+	iesireAutor << a.nrCartiPublicate;
+	iesireAutor << a.numeAutor;
+	return iesireAutor;
+}
+istream& operator>>(istream& intrareAutor, Autor& a)
+{
+	intrareAutor >> (CartiRomanesti&)a;
+	if (a.numeAutor) delete[]a.numeAutor;
+	char aux[50];
+	cout << " numele autorului este: ";
+	intrareAutor >> aux;
+	a.numeAutor = new char[strlen(aux) + 1];
+	strcpy_s(a.numeAutor, strlen(aux) + 1, aux);
+	cout << " numarul de carti publicate de autor sunt: ";
+	intrareAutor >> a.nrCartiPublicate;
+	return intrareAutor;
+}
+
+class PermisBiblioteca : public Cititor
+{
+private:
+	char* serie;
+	int valabilitate;
+
+public:
+	PermisBiblioteca() :Cititor()
+	{
+		this->valabilitate=2;
+		this->serie = new char[strlen("dgvdg") + 1];
+		strcpy_s(this->serie, strlen("dgvdg") + 1, "dgvdg");
+	}
+	PermisBiblioteca(int valabilitate, const char* serie) :Cititor()
+	{
+		this->valabilitate=valabilitate;
+		this->serie = new char[strlen(serie) + 1];
+		strcpy_s(this->serie, strlen(serie) + 1, serie);
+	}
+	PermisBiblioteca(const PermisBiblioteca& p) :Cititor()
+	{
+		this->valabilitate = p.valabilitate;
+		this->serie = new char[strlen(p.serie) + 1];
+		strcpy_s(this->serie, strlen(p.serie) + 1, p.serie);
+	}
+	PermisBiblioteca operator=(const PermisBiblioteca& p)
+	{
+		if (this != &p)
+		{
+			(Cititor)*this = (Cititor)p;
+			this->valabilitate = p.valabilitate;
+			if (this->serie) delete[]this->serie;
+			this->serie = new char[strlen(p.serie) + 1];
+			strcpy_s(this->serie, strlen(p.serie) + 1, p.serie);
+		}
+		return *this;
+	}
+	~PermisBiblioteca()
+	{
+		if (this->serie) delete[]this->serie;
+	}
+	char* getSerie()
+	{
+		return this->serie;
+	}
+	void setSerir(char* serie)
+	{
+		if (this->serie) delete[]this->serie;
+		this->serie = new char[strlen(serie) + 1];
+		strcpy_s(this->serie, strlen(serie) + 1, serie);
+	}
+	int getValabilitate()
+	{
+		return this->valabilitate;
+	}
+	void setValabilitate(int val)
+	{
+		this->valabilitate = val;
+	}
+	
+     friend ostream& operator<<(ostream& iesirPermis, const PermisBiblioteca& p);
+	 friend istream& operator>>(istream& intrarePermis, PermisBiblioteca& p);
+};
+ostream& operator<<(ostream& iesirPermis, const PermisBiblioteca& p)
+{
+	iesirPermis << (Cititor)p;
+	iesirPermis << p.valabilitate;
+	iesirPermis << p.serie;
+	return iesirPermis;
+}
+istream& operator>>(istream& intrarePermis, PermisBiblioteca& p)
+{
+	intrarePermis >> (Cititor&)p;
+	if (p.serie) delete[]p.serie;
+	char aux[50];
+	cout << " seria de pe permis: ";
+	intrarePermis >> aux;
+	p.serie = new char[strlen(aux) + 1];
+	strcpy_s(p.serie, strlen(aux) + 1, aux);
+	cout << " valabilitatea permisului: ";
+	intrarePermis >> p.valabilitate;
+	return intrarePermis;
+}
+
 
 void main()
 {
@@ -1015,7 +1196,7 @@ void main()
 
 	//Biblioteca::setPlaneta("planeta Terra");
 
-    CartiRomanesti carte1, carte2;
+   /* CartiRomanesti carte1, carte2;
     CartiRomanesti* vector = new CartiRomanesti[2]{ carte1, carte2 };
 	Cititor d1;
 	cout << d1 << endl;
@@ -1063,5 +1244,19 @@ void main()
 	fstream f("biblioteca.bin", ios::in | ios::binary);
 	c7.citireDinFisBinar(f);
 	f.close();
-	cout << c7;
+	cout << c7;*/
+
+Autor e1;
+Autor e2(5, "blaga");
+Autor e3 = e1;
+Autor e4;
+cin >> e4;
+cout << e4;
+cout << endl;
+PermisBiblioteca f1;
+PermisBiblioteca f2(6, "yyxygs");
+PermisBiblioteca f3 = f1;
+PermisBiblioteca f4;
+cin >> f4;
+cout << f4;
 }
