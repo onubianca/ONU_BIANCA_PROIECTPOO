@@ -2,7 +2,19 @@
 #include<fstream>
 using namespace std;
 
-class CartiRomanesti
+class ResursaCulturala //cls abstracta
+{
+public:
+	virtual void afisare() = 0;
+};
+
+class Carti //cls abstracta
+{
+public:
+	virtual void afisareCarti() = 0;
+};
+
+class CartiRomanesti: public Carti
 {
 private:
 	const int idCarte;
@@ -14,7 +26,13 @@ private:
 	string* numeCapitole;
 
 public:
-	CartiRomanesti() :idCarte(1)
+	void afisareCarti()
+	{
+		cout << "Cartea " << this->titluCarte << " scrisa de " << this->numeAutor << " a fost publicata in anul " << this->anPublicatie << endl;
+	}
+	
+
+	CartiRomanesti() :Carti(),  idCarte(1)
 	{
 		this->titluCarte = "Ion";
 		this->numeAutor = "Rebreanu";
@@ -24,7 +42,7 @@ public:
 
 	}
 
-	CartiRomanesti(string titluCarte, string numeAutor, int anPublicatie, int nrCapitole, string* numeCapitole) :idCarte(5)
+	CartiRomanesti(string titluCarte, string numeAutor, int anPublicatie, int nrCapitole, string* numeCapitole) :Carti(), idCarte(5)
 	{
 		this->titluCarte = titluCarte;
 		this->numeAutor = numeAutor;
@@ -38,7 +56,7 @@ public:
 
 	}
 
-	CartiRomanesti(string titluCarte, string numeAutor, int anPublicatie) :idCarte(25)
+	CartiRomanesti(string titluCarte, string numeAutor, int anPublicatie) :Carti(), idCarte(25)
 	{
 
 		this->titluCarte = titluCarte;
@@ -48,7 +66,7 @@ public:
 		this->numeCapitole = NULL;
 	}
 
-	CartiRomanesti(const CartiRomanesti& a) :idCarte(a.idCarte)  //constructor copiere
+	CartiRomanesti(const CartiRomanesti& a) :Carti(a), idCarte(a.idCarte)  //constructor copiere
 	{
 		this->titluCarte = a.titluCarte;
 		this->numeAutor = a.numeAutor;
@@ -65,6 +83,7 @@ public:
 	{
 		if (this != &a)
 		{
+			Carti::operator=(a);
 			this->titluCarte = a.titluCarte;
 			this->numeAutor = a.numeAutor;
 			this->anPublicatie = a.anPublicatie;
@@ -243,7 +262,48 @@ ifstream& operator>>(ifstream& intrareC,CartiRomanesti& a)
 	return intrareC;
 }
 
-class Bibliotecar
+class BenziDesenate: public Carti
+{
+private:
+	char* titluBenzi;
+	
+public:
+	void afisareCarti()
+	{
+		cout << this->titluBenzi << " este o banda desenata" << endl;
+	}
+
+	BenziDesenate() :Carti()
+	{
+		this->titluBenzi = new char[strlen("IronMan") + 1];
+		strcpy_s(this->titluBenzi, strlen("IronMan") + 1, "IronMan");
+	}
+	BenziDesenate(const char* titluBenzi) :Carti()
+	{
+		this->titluBenzi = new char[strlen(titluBenzi) + 1];
+		strcpy_s(this->titluBenzi, strlen(titluBenzi) + 1, titluBenzi);
+	}
+	BenziDesenate(const BenziDesenate& g):Carti()
+	{
+		this->titluBenzi = g.titluBenzi;
+	}
+	BenziDesenate operator=(const BenziDesenate& g) 
+	{
+		if (this != &g)
+		{
+			Carti::operator=(g);
+			this->titluBenzi = g.titluBenzi;
+		}
+		return *this;
+	}
+	~BenziDesenate()
+	{
+		if (this->titluBenzi) delete[]this->titluBenzi;
+	}
+};
+
+
+class Bibliotecar:public ResursaCulturala
 {
 private:
 	const int cnp;
@@ -255,7 +315,12 @@ private:
 	string* limbiStraine;
 
 public:
-	Bibliotecar() :cnp(nrLegitimatie++)
+	void afisare()
+	{
+		cout << this->numeBibliotecar << " este bibliotecar" << endl;
+	}
+
+	Bibliotecar() :ResursaCulturala(), cnp(nrLegitimatie++)
 	{
 		this->varsta = 26;
 		this->numeBibliotecar = "Ana";
@@ -264,7 +329,7 @@ public:
 		this->limbiStraine = NULL;
 	}
 
-	Bibliotecar(string numeBibliotecar, int varsta, char gen, int nrLimbiStraine, string* limbiStraine) :cnp(nrLegitimatie++)
+	Bibliotecar(string numeBibliotecar, int varsta, char gen, int nrLimbiStraine, string* limbiStraine) :ResursaCulturala(), cnp(nrLegitimatie++)
 	{
 		this->numeBibliotecar = numeBibliotecar;
 		this->varsta = varsta;
@@ -277,7 +342,7 @@ public:
 		}
 	}
 
-	Bibliotecar(string numeBibliotecar, int varsta) :cnp(nrLegitimatie)
+	Bibliotecar(string numeBibliotecar, int varsta) :ResursaCulturala(), cnp(nrLegitimatie)
 	{
 		nrLegitimatie++;
 		this->varsta = varsta;
@@ -287,7 +352,7 @@ public:
 		this->limbiStraine = NULL;
 	}
 
-	Bibliotecar(const Bibliotecar& b) :cnp(nrLegitimatie++)  //constructor copiere
+	Bibliotecar(const Bibliotecar& b) :ResursaCulturala(b), cnp(nrLegitimatie++)  //constructor copiere
 	{
 		this->numeBibliotecar = b.numeBibliotecar;
 		this->varsta = b.varsta;
@@ -304,6 +369,7 @@ public:
 	{
 		if (this != &b)
 		{
+			ResursaCulturala::operator=(b);
 			this->numeBibliotecar = b.numeBibliotecar;
 			this->varsta = b.varsta;
 			this->gen = b.gen;
@@ -485,7 +551,7 @@ void verifVarstaB(Bibliotecar b)
 	else cout << "nu" << endl;
 }
 
-class Biblioteca
+class Biblioteca: public ResursaCulturala
 {
 private:
 	const int anInfiintare;
@@ -496,7 +562,12 @@ private:
 	string* numeSaliLectura;
 
 public:
-	Biblioteca() :anInfiintare(1980)
+	void afisare()
+	{
+		cout << "In orasul " << this->oras << " exista biblioteca";
+	}
+
+	Biblioteca() :ResursaCulturala(), anInfiintare(1980)
 	{
 		this->suprafata = 5000;
 		this->oras = "Bucuresti";
@@ -504,7 +575,7 @@ public:
 		this->numeSaliLectura = NULL;
 	}
 
-	Biblioteca(string oras, float suprafata, int nrSaliLectura, string* numeSaliLectura) :anInfiintare(1948)
+	Biblioteca(string oras, float suprafata, int nrSaliLectura, string* numeSaliLectura) :ResursaCulturala(), anInfiintare(1948)
 	{
 		this->oras = oras;
 		this->suprafata = suprafata;
@@ -516,7 +587,7 @@ public:
 		}
 	}
 
-	Biblioteca(int nrSaliLectura, string* numeSaliLectura) :anInfiintare(2005)
+	Biblioteca(int nrSaliLectura, string* numeSaliLectura) :ResursaCulturala(), anInfiintare(2005)
 	{
 		this->oras = "Iasi";
 		this->suprafata = 1500;
@@ -529,7 +600,7 @@ public:
 	}
 
 
-	Biblioteca(const Biblioteca& c) :anInfiintare(c.anInfiintare)  //constructor copiere
+	Biblioteca(const Biblioteca& c) :ResursaCulturala(c), anInfiintare(c.anInfiintare)  //constructor copiere
 	{
 		this->oras = c.oras;
 		this->suprafata = c.suprafata;
@@ -545,6 +616,7 @@ public:
 	{
 		if (this != &c)
 		{
+			ResursaCulturala::operator=(c);
 			this->oras = c.oras;
 			this->suprafata = c.suprafata;
 			this->nrSaliLectura = c.nrSaliLectura;
@@ -726,7 +798,7 @@ public:
 	Cititor() :idCititor(0)
 	{
 		this->nrCartiImprumutate = 0;
-		
+
 	}
 	Cititor(int idCititor, int nrCartiImprumutate, CartiRomanesti* carte) :idCititor(idCititor)
 	{
@@ -746,7 +818,7 @@ public:
 			this->carte[i] = d.carte[i];
 		}
 	}
-	Cititor operator=(const Cititor& d) 
+	Cititor operator=(const Cititor& d)
 	{
 		if (this != &d)
 		{
@@ -801,7 +873,7 @@ public:
 };
 ostream& operator<<(ostream& iesireCititor, const Cititor& d)
 {
-	iesireCititor << "Cititorul a imprumutat  " << d.nrCartiImprumutate << " carti cum ar fi: " ;
+	iesireCititor << "Cititorul a imprumutat  " << d.nrCartiImprumutate << " carti cum ar fi: ";
 	if (d.nrCartiImprumutate > 0)
 		for (int i = 0; i < d.nrCartiImprumutate; i++)
 			iesireCititor << d.carte[i] << " ";
@@ -845,6 +917,7 @@ ifstream& operator>>(ifstream& intrareCi, Cititor& d)
 		intrareCi >> d.carte[i];
 	return intrareCi;
 }
+
 
 class Autor : public CartiRomanesti
 {
@@ -1015,6 +1088,25 @@ istream& operator>>(istream& intrarePermis, PermisBiblioteca& p)
 	return intrarePermis;
 }
 
+class Colectie
+{
+private:
+	int nr;
+	Carti** carti;
+public:
+	Colectie()
+	{
+		this->nr = 10;
+		this->carti = new Carti * [10];
+		for (int i = 0; i < 10; i++)
+			this->carti[i] = new CartiRomanesti();
+	}
+	Carti*& operator[](int i)
+	{
+		if (i >= 0 && i < this->nr)
+			return this->carti[i];
+	}
+};
 
 void main()
 {
@@ -1197,7 +1289,7 @@ void main()
 	//Biblioteca::setPlaneta("planeta Terra");
 
    /* CartiRomanesti carte1, carte2;
-    CartiRomanesti* vector = new CartiRomanesti[2]{ carte1, carte2 };
+	CartiRomanesti* vector = new CartiRomanesti[2]{ carte1, carte2 };
 	Cititor d1;
 	cout << d1 << endl;
 	Cititor d2 = d1;
@@ -1205,24 +1297,24 @@ void main()
 	Cititor d3(1, 2, vector);
 	cout << d3;
 
-    CartiRomanesti a6, a7;
-    cin >> a6;
-    ofstream afisare("carte.txt", ios::out);
-    afisare << a6;
-    afisare.close();
-    ifstream citire("carte.txt", ios::in);
-    citire >> a7;
-    cout << a7;
-    citire.close();
+	CartiRomanesti a6, a7;
+	cin >> a6;
+	ofstream afisare("carte.txt", ios::out);
+	afisare << a6;
+	afisare.close();
+	ifstream citire("carte.txt", ios::in);
+	citire >> a7;
+	cout << a7;
+	citire.close();
 
-    Cititor d4(1, 2, vector), d5;
-    ofstream afisare("cititor.txt", ios::out);
-    afisare << d4;
-    afisare.close();
-    ifstream citire("cititor.txt", ios::in);
-    citire >> d5;
-    cout << d5;
-    citire.close();
+	Cititor d4(1, 2, vector), d5;
+	ofstream afisare("cititor.txt", ios::out);
+	afisare << d4;
+	afisare.close();
+	ifstream citire("cititor.txt", ios::in);
+	citire >> d5;
+	cout << d5;
+	citire.close();
 
 	Bibliotecar b6, b7;
 	cin >> b6;
@@ -1246,17 +1338,40 @@ void main()
 	f.close();
 	cout << c7;*/
 
-Autor e1;
-Autor e2(5, "blaga");
-Autor e3 = e1;
-Autor e4;
-cin >> e4;
-cout << e4;
-cout << endl;
-PermisBiblioteca f1;
-PermisBiblioteca f2(6, "yyxygs");
-PermisBiblioteca f3 = f1;
-PermisBiblioteca f4;
-cin >> f4;
-cout << f4;
+	//Autor e1;
+	//Autor e2(5, "blaga");
+	//Autor e3 = e1;
+	//Autor e4;
+	//cin >> e4;
+	//cout << e4;
+	//cout << endl;
+	//PermisBiblioteca f1;
+	//PermisBiblioteca f2(6, "yyxygs");
+	//PermisBiblioteca f3 = f1;
+	//PermisBiblioteca f4;
+	//cin >> f4;
+	//cout << f4;
+
+    //faza 8
+CartiRomanesti a6("Ion", "Rebreanu", 1920);
+a6.afisareCarti();
+
+Carti* x;
+x = new BenziDesenate();
+x->afisareCarti();
+
+Colectie y;
+y[0] = new CartiRomanesti("Baltagul", "Sadoveanu", 1930);
+y[1] = new CartiRomanesti("Ion", "Rebreanu", 1920);
+y[2] = new  BenziDesenate();
+y[3] = new BenziDesenate("Thor");
+y[4] = new CartiRomanesti("Morometii", "Preda", 1955);
+y[5] = new CartiRomanesti("Soimii", "Sadoveanu", 1904);
+y[6] = new CartiRomanesti("Rascoala", "Rebreanu", 1933);
+y[7] = new BenziDesenate("Black Phanter");
+y[8] = new BenziDesenate("Captain America");
+y[9] = new BenziDesenate("Avengers");
+for (int i = 0; i < 10; i++)
+	y[i]->afisareCarti();
 }
+
