@@ -481,7 +481,7 @@ public:
 		cout << endl;
 	}*/
 
-	void citireDinFisBinar(fstream& f) 
+	void citireDinFisBinar(fstream& f) //met pt citire on fis bin
 	{
 		f.read((char*)&this->nrLimbiStraine, sizeof(int));
 		if (this->limbiStraine)
@@ -499,7 +499,7 @@ public:
 		}
 	}
 
-	void scriereInFisBinar(fstream& g) 
+	void scriereInFisBinar(fstream& g) //met pt scriere on fis bin
 	{
 		g.write((char*)&this->nrLimbiStraine, sizeof(int));
 		for (int i = 0; i < this->nrLimbiStraine; i++) 
@@ -787,6 +787,8 @@ string getSirSaliLectura(const Biblioteca& c)
 	return aux;
 }
 
+//faza 5
+
 class Cititor
 {
 private:
@@ -995,11 +997,14 @@ istream& operator>>(istream& intrareAutor, Autor& a)
 	intrareAutor >> (CartiRomanesti&)a;
 	if (a.numeAutor) delete[]a.numeAutor;
 	char aux[50];
+	cout << endl;
 	cout << " numele autorului este: ";
 	intrareAutor >> aux;
 	a.numeAutor = new char[strlen(aux) + 1];
 	strcpy_s(a.numeAutor, strlen(aux) + 1, aux);
+	cout << endl;
 	cout << " numarul de carti publicate de autor sunt: ";
+	cout << endl;
 	intrareAutor >> a.nrCartiPublicate;
 	return intrareAutor;
 }
@@ -1079,11 +1084,14 @@ istream& operator>>(istream& intrarePermis, PermisBiblioteca& p)
 	intrarePermis >> (Cititor&)p;
 	if (p.serie) delete[]p.serie;
 	char aux[50];
+	cout << endl;
 	cout << " seria de pe permis: ";
 	intrarePermis >> aux;
 	p.serie = new char[strlen(aux) + 1];
 	strcpy_s(p.serie, strlen(aux) + 1, aux);
+	cout << endl;
 	cout << " valabilitatea permisului: ";
+	cout << endl;
 	intrarePermis >> p.valabilitate;
 	return intrarePermis;
 }
@@ -1110,185 +1118,185 @@ public:
 
 void main()
 {
-	////CartiRomanesti
-	//CartiRomanesti a1;
-	///*a1.afisCartiRomanesti();*/
-	//cout << a1;
+	//CartiRomanesti
+	CartiRomanesti a1;
+	/*a1.afisCartiRomanesti();*/
+	cout << a1;
 
-	//string* numeCapitole = new string[2]{ "Glasul Pamantului,", "Glasul Iubirii" };
-	//CartiRomanesti a2("Ion", "Rebreanu", 1920, 2, numeCapitole);
-	///*a2.afisCartiRomanesti();*/
-	//cout << a2;
+	string* numeCapitole = new string[2]{ "Glasul Pamantului,", "Glasul Iubirii" };
+	CartiRomanesti a2("Ion", "Rebreanu", 1920, 2, numeCapitole);
+	/*a2.afisCartiRomanesti();*/
+	cout << a2;
 
-	//CartiRomanesti a3("Morometii", "Preda", 1955);
-	///*a3.afisCartiRomanesti();*/
-	//cout << a3;
+	CartiRomanesti a3("Morometii", "Preda", 1955);
+	/*a3.afisCartiRomanesti();*/
+	cout << a3;
 
-	//cout << a3.getLimbaPublicatie() << endl;
+	cout << a3.getLimbaPublicatie() << endl;
 
-	//CartiRomanesti a4;
-	//a4 = a2;
-	//a4.setTitluCarte("Morometii");
-	//a4.setNumeAutor("Preda");
-	//a4.setAnPublicatie(1955);
-	//cout << "Cartea " << a4.getTitluCarte() << " scrisa de " << a4.getNumeAutor() << " publicata in anul " << a4.getAnPublicatie() << " are doua capitole cu numele:  ";
-	//string* v1 = new string[2]{ "Partea I,", "Partea II" };
-	//a4.setCapitole(2, v1);
-	//for (int j = 0; j < 2; j++)
-	//	cout << a4.getNumeCapitole()[j];
-	//delete[]v1;
-	//cout << endl;
+	CartiRomanesti a4;
+	a4 = a2;
+	a4.setTitluCarte("Morometii");
+	a4.setNumeAutor("Preda");
+	a4.setAnPublicatie(1955);
+	cout << "Cartea " << a4.getTitluCarte() << " scrisa de " << a4.getNumeAutor() << " publicata in anul " << a4.getAnPublicatie() << " are doua capitole cu numele:  ";
+	string* v1 = new string[2]{ "Partea I,", "Partea II" };
+	a4.setCapitole(2, v1);
+	for (int j = 0; j < 2; j++)
+		cout << a4.getNumeCapitole()[j];
+	delete[]v1;
+	cout << endl;
 
-	//CartiRomanesti a5;
-	//a5.setAnPublicatie(2001);
-	//cout << a5.getAnPublicatie() << endl;
-	//cout << a5->getAnPublicatie() << endl;
+	CartiRomanesti a5;
+	a5.setAnPublicatie(2001);
+	cout << a5.getAnPublicatie() << endl;
+	cout << a5->getAnPublicatie() << endl;
 
-	//cin >> a1 >> a2;
-	//if (a1 == a2)
-	//	cout << "Aceiasi carte";
-	//else
-	//	cout << "Carti diferite";
-	//cout << endl;
+	cin >> a1 >> a2;
+	if (a1 == a2)
+		cout << "Aceiasi carte";
+	else
+		cout << "Carti diferite";
+	cout << endl;
 
-	//int nrCarti;
-	//cout << "Introduceti numarul de carti: ";
-	//cin >> nrCarti;
-	//CartiRomanesti* carti = new CartiRomanesti[nrCarti];
-	//for (int i = 0; i < nrCarti; i++) {
-	//	cout << i + 1 << endl;
-	//	cin >> carti[i];
-	//}
-	//for (int i = 0; i < nrCarti; i++) {
-	//	cout << carti[i];
-	//}
-	//delete[] carti;
+	int nrCarti;
+	cout << "Introduceti numarul de carti: ";
+	cin >> nrCarti;
+	CartiRomanesti* carti = new CartiRomanesti[nrCarti];
+	for (int i = 0; i < nrCarti; i++) {
+		cout << i + 1 << endl;
+		cin >> carti[i];
+	}
+	for (int i = 0; i < nrCarti; i++) {
+		cout << carti[i];
+	}
+	delete[] carti;
 
-	//int nrLinii, nrColoane;
-	//cout << "Introduceti numarul de linii: ";
-	//cin >> nrLinii;
-	//cout << "Introduceti numarul de coloane: ";
-	//cin >> nrColoane;
+	int nrLinii, nrColoane;
+	cout << "Introduceti numarul de linii: ";
+	cin >> nrLinii;
+	cout << "Introduceti numarul de coloane: ";
+	cin >> nrColoane;
 
-	//CartiRomanesti** carte = new CartiRomanesti * [nrLinii];
-	//for (int i = 0; i < nrLinii; i++) {
-	//	carte[i] = new CartiRomanesti[nrColoane];
-	//}
-	//for (int i = 0; i < nrLinii; i++) {
-	//	for (int j = 0; j < nrColoane; j++) {
-	//		cout << i + 1 << " " << j + 1 << endl;
-	//		cin >> carte[i][j];
-	//	}
-	//}
-	//for (int i = 0; i < nrLinii; i++) {
-	//	for (int j = 0; j < nrColoane; j++) {
-	//		cout << carte[i][j];
-	//	}
-	//}
+	CartiRomanesti** carte = new CartiRomanesti * [nrLinii];
+	for (int i = 0; i < nrLinii; i++) {
+		carte[i] = new CartiRomanesti[nrColoane];
+	}
+	for (int i = 0; i < nrLinii; i++) {
+		for (int j = 0; j < nrColoane; j++) {
+			cout << i + 1 << " " << j + 1 << endl;
+			cin >> carte[i][j];
+		}
+	}
+	for (int i = 0; i < nrLinii; i++) {
+		for (int j = 0; j < nrColoane; j++) {
+			cout << carte[i][j];
+		}
+	}
 
-	////Bibliotecar
-	//Bibliotecar b1;
-	///*b1.afisBibliotecar();*/
-	//cout << b1;
+	//Bibliotecar
+	Bibliotecar b1;
+	/*b1.afisBibliotecar();*/
+	cout << b1;
 
-	//cout << b1.getNrLegitimatie() << endl;
+	cout << b1.getNrLegitimatie() << endl;
 
-	//string* limbiStraine = new string[3]{ "engleza","franceza","germana" };
-	//Bibliotecar b2("Maria", 17, 'f', 3, limbiStraine);
-	////b2.afisBibliotecar();
-	//cout << b2;
+	string* limbiStraine = new string[3]{ "engleza","franceza","germana" };
+	Bibliotecar b2("Maria", 17, 'f', 3, limbiStraine);
+	//b2.afisBibliotecar();
+	cout << b2;
 
-	//Bibliotecar b3("Anca", 29);
-	////b3.afisBibliotecar();
-	//b3++;
-	//cout << b3;
+	Bibliotecar b3("Anca", 29);
+	//b3.afisBibliotecar();
+	b3++;
+	cout << b3;
 
-	//Bibliotecar b4 = b3;
-	//b4.setNumeBibliotecar("Sara");
-	//b4.setVarsta(47);
-	//b4.setGen('f');
-	//cout << "Bibliotecara " << b4.getNumeBibliotecar() << " are " << b4.getVarsta() << " de ani si cunoaste patru limbi straine cum ar fi: ";
-	//string* v2 = new string[4]{ "engleza,", "franceza,", "germana,", "araba" };
-	//b4.setLimbiStraine(4, v2);
-	//for (int j = 0; j < 4; j++)
-	//	cout << b4.getLimbiStraine()[j];
-	//delete[]v2;
-	//cout << endl;
+	Bibliotecar b4 = b3;
+	b4.setNumeBibliotecar("Sara");
+	b4.setVarsta(47);
+	b4.setGen('f');
+	cout << "Bibliotecara " << b4.getNumeBibliotecar() << " are " << b4.getVarsta() << " de ani si cunoaste patru limbi straine cum ar fi: ";
+	string* v2 = new string[4]{ "engleza,", "franceza,", "germana,", "araba" };
+	b4.setLimbiStraine(4, v2);
+	for (int j = 0; j < 4; j++)
+		cout << b4.getLimbiStraine()[j];
+	delete[]v2;
+	cout << endl;
 
-	//Bibliotecar b5;
-	//cin >> b5;
-	//cout << b5;
-	//verifVarstaB(b5);
+	Bibliotecar b5;
+	cin >> b5;
+	cout << b5;
+	verifVarstaB(b5);
 
-	//cout << endl;
-	//if (!b4.getGen())
-	//	cout << "da";
-	//else
-	//	cout << "nu";
-	//cout << endl;
+	cout << endl;
+	if (!b4.getGen())
+		cout << "da";
+	else
+		cout << "nu";
+	cout << endl;
 
-	//int numarBibliotecari;
-	//cout << "Introduceti numarul de bibliotecari: ";
-	//cin >> numarBibliotecari;
-	//Bibliotecar* bibliotecar = new Bibliotecar[numarBibliotecari];
-	//for (int i = 0; i < numarBibliotecari; i++) {
-	//	cin >> bibliotecar[i];
-	//}
-	//for (int i = 0; i < numarBibliotecari; i++) {
-	//	cout << bibliotecar[i];
-	//}
-	//delete[] bibliotecar;
+	int numarBibliotecari;
+	cout << "Introduceti numarul de bibliotecari: ";
+	cin >> numarBibliotecari;
+	Bibliotecar* bibliotecar = new Bibliotecar[numarBibliotecari];
+	for (int i = 0; i < numarBibliotecari; i++) {
+		cin >> bibliotecar[i];
+	}
+	for (int i = 0; i < numarBibliotecari; i++) {
+		cout << bibliotecar[i];
+	}
+	delete[] bibliotecar;
 
-	////Biblioteca
-	//Biblioteca c1;
-	///*c1.afisBiblioteca();*/
-	//cin >> c1;
-	//cout << c1;
+	//Biblioteca
+	Biblioteca c1;
+	/*c1.afisBiblioteca();*/
+	cin >> c1;
+	cout << c1;
 
-	//string* numeSaliLectura = new string[2]{ "Eminescu,", "Creanga" };
-	//Biblioteca c2("Iasi", 1500, 2, numeSaliLectura);
-	///*c2.afisBiblioteca();*/
-	//cout << c2;
+	string* numeSaliLectura = new string[2]{ "Eminescu,", "Creanga" };
+	Biblioteca c2("Iasi", 1500, 2, numeSaliLectura);
+	/*c2.afisBiblioteca();*/
+	cout << c2;
 
-	//Biblioteca c3(2, numeSaliLectura);
-	///*c3.afisBiblioteca();*/
-	//cout << c3;
+	Biblioteca c3(2, numeSaliLectura);
+	/*c3.afisBiblioteca();*/
+	cout << c3;
 
-	//Biblioteca c4 = c1;
-	//c4.setOras("Timisoara");
-	//c4.setSuprafata(4500);
-	//cout << "Biblioteca din orasul " << c4.getOras() << " are o suprafata de " << c4.getSuprafata() << " metri patrati si trei sali de lectura numite dupa scriitori romani precum:  ";
-	//string* v3 = new string[3]{ "Eminescu,", "Creanga,", "Caragiale" };
-	//c4.setSaliLetura(3, v3);
-	//for (int j = 0; j < 3; j++)
-	//	cout << c4.getSaliLetura()[j];
-	//delete[]v3;
-	//cout << endl;
-	//cout << c4[2] << endl;
+	Biblioteca c4 = c1;
+	c4.setOras("Timisoara");
+	c4.setSuprafata(4500);
+	cout << "Biblioteca din orasul " << c4.getOras() << " are o suprafata de " << c4.getSuprafata() << " metri patrati si trei sali de lectura numite dupa scriitori romani precum:  ";
+	string* v3 = new string[3]{ "Eminescu,", "Creanga,", "Caragiale" };
+	c4.setSaliLetura(3, v3);
+	for (int j = 0; j < 3; j++)
+		cout << c4.getSaliLetura()[j];
+	delete[]v3;
+	cout << endl;
+	cout << c4[2] << endl;
 
-	//if (c2 > c4)
-	//	cout << "c2 e mai mare";
-	//else
-	//	cout << "c4 e mai mare";
-	//cout << endl;
+	if (c2 > c4)
+		cout << "c2 e mai mare";
+	else
+		cout << "c4 e mai mare";
+	cout << endl;
 
-	//cout << getSirSaliLectura(c4) << endl;
+	cout << getSirSaliLectura(c4) << endl;
 
-	//int numarBiblioteci;
-	//cout << "Introduceti numarul de biblioteci: ";
-	//cin >> numarBiblioteci;
-	//Biblioteca* biblioteca = new Biblioteca[numarBiblioteci];
-	//for (int i = 0; i < numarBiblioteci; i++) {
-	//	cin >> biblioteca[i];
-	//}
-	//for (int i = 0; i < numarBiblioteci; i++) {
-	//	cout << biblioteca[i];
-	//}
-	//delete[] biblioteca;
+	int numarBiblioteci;
+	cout << "Introduceti numarul de biblioteci: ";
+	cin >> numarBiblioteci;
+	Biblioteca* biblioteca = new Biblioteca[numarBiblioteci];
+	for (int i = 0; i < numarBiblioteci; i++) {
+		cin >> biblioteca[i];
+	}
+	for (int i = 0; i < numarBiblioteci; i++) {
+		cout << biblioteca[i];
+	}
+	delete[] biblioteca;
 
-	//Biblioteca::setPlaneta("planeta Terra");
+	Biblioteca::setPlaneta("planeta Terra");
 
-   /* CartiRomanesti carte1, carte2;
+    CartiRomanesti carte1, carte2;
 	CartiRomanesti* vector = new CartiRomanesti[2]{ carte1, carte2 };
 	Cititor d1;
 	cout << d1 << endl;
@@ -1308,10 +1316,10 @@ void main()
 	citire.close();
 
 	Cititor d4(1, 2, vector), d5;
-	ofstream afisare("cititor.txt", ios::out);
+	ofstream afisareC("cititor.txt", ios::out);
 	afisare << d4;
 	afisare.close();
-	ifstream citire("cititor.txt", ios::in);
+	ifstream citireC("cititor.txt", ios::in);
 	citire >> d5;
 	cout << d5;
 	citire.close();
@@ -1329,36 +1337,39 @@ void main()
 
 	Biblioteca c6, c7;
 	cin >> c6;
-	fstream g("biblioteca.bin", ios::out | ios::binary);
+	fstream gB("biblioteca.bin", ios::out | ios::binary);
 	c6.scriereInFisBinar(g);
 	g.close();
 
-	fstream f("biblioteca.bin", ios::in | ios::binary);
+	fstream fB("biblioteca.bin", ios::in | ios::binary);
 	c7.citireDinFisBinar(f);
 	f.close();
-	cout << c7;*/
+	cout << c7;
 
-	//Autor e1;
-	//Autor e2(5, "blaga");
-	//Autor e3 = e1;
-	//Autor e4;
-	//cin >> e4;
-	//cout << e4;
-	//cout << endl;
-	//PermisBiblioteca f1;
-	//PermisBiblioteca f2(6, "yyxygs");
-	//PermisBiblioteca f3 = f1;
-	//PermisBiblioteca f4;
-	//cin >> f4;
-	//cout << f4;
+	Autor e1;
+	Autor e2(5, "blaga");
+	Autor e3 = e1;
+	Autor e4;
+	cin >> e4;
+	cout << e4;
+	cout << endl;
+	PermisBiblioteca f1;
+	PermisBiblioteca f2(6, "yyxygs");
+	PermisBiblioteca f3 = f1;
+	PermisBiblioteca f4;
+	cin >> f4;
+	cout << f4;
 
     //faza 8
-CartiRomanesti a6("Ion", "Rebreanu", 1920);
-a6.afisareCarti();
+	cout << endl;
+CartiRomanesti a10("Ion", "Rebreanu", 1920);
+a10.afisareCarti();
 
 Carti* x;
 x = new BenziDesenate();
 x->afisareCarti();
+
+cout << endl;
 
 Colectie y;
 y[0] = new CartiRomanesti("Baltagul", "Sadoveanu", 1930);
